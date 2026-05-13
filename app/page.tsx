@@ -1,65 +1,120 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useRef } from "react";
+import Link from "next/link";
+
+const FEATURES = [
+  {
+    n: "01",
+    title: "Elegí tu presentación",
+    body: "Cada producto está disponible en tres tamaños: S, M y L. Probá antes de comprometerte con el grande.",
+  },
+  {
+    n: "02",
+    title: "Filtrá por serie",
+    body: "Organizamos el catálogo en series para que encuentres rápido lo que buscás.",
+  },
+  {
+    n: "03",
+    title: "Recibís en casa",
+    body: "Cada pedido viaja protegido y sellado. Listo para usar ni bien lo abrís.",
+  },
+];
 
 export default function Home() {
+  const navRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const onScroll = () =>
+      navRef.current?.classList.toggle("scrolled", window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add("in")),
+      { threshold: 0.1 }
+    );
+    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <>
+      {/* ── NAV ── */}
+      <nav ref={navRef}>
+        <div className="nav-brand">
+          <span className="brand-mark">◈</span>
+          <div>
+            <div className="logo-text">Catálogo</div>
+            <div className="logo-sub">Colección 2025</div>
+          </div>
+        </div>
+        <div className="nav-links">
+          <Link href="/catalogo" className="nav-link">Productos</Link>
+          <a href="#como-funciona" className="nav-link">Cómo funciona</a>
+        </div>
+        <Link href="/catalogo" className="btn-nav">Ver catálogo</Link>
+      </nav>
+
+      {/* ── HERO ── */}
+      <section className="hero">
+        <div className="hero-bg" aria-hidden="true">
+          {Array.from({ length: 25 }).map((_, i) => (
+            <div key={i} className="grid-cell" />
+          ))}
+        </div>
+        <div className="hero-content">
+          <p className="hero-kicker reveal">Colección 2025</p>
+          <h1 className="hero-h1 reveal d1">
+            Tu catálogo,<br /><em>a tu medida.</em>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="hero-body reveal d2">
+            Explorá cada producto en el tamaño que necesitás.
+            Sin comprometerte con más de lo que querés.
           </p>
+          <div className="hero-actions reveal d3">
+            <Link href="/catalogo" className="btn-primary">Ver catálogo completo</Link>
+            <a href="#como-funciona" className="btn-ghost">Cómo funciona</a>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="hero-pills reveal d4" aria-hidden="true">
+          <span className="pill-tag">S</span>
+          <span className="pill-sep">·</span>
+          <span className="pill-tag">M</span>
+          <span className="pill-sep">·</span>
+          <span className="pill-tag">L</span>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* ── CÓMO FUNCIONA ── */}
+      <section id="como-funciona" className="features-section">
+        {FEATURES.map((f, i) => (
+          <div key={f.n} className={`feature reveal d${i + 1}`}>
+            <p className="feature-n">{f.n}</p>
+            <h3 className="feature-title">{f.title}</h3>
+            <p className="feature-body">{f.body}</p>
+          </div>
+        ))}
+      </section>
+
+      {/* ── CTA ── */}
+      <section className="cta-section reveal">
+        <p className="cta-label">Comenzá ahora</p>
+        <h2 className="cta-title">¿Listo para explorar?</h2>
+        <Link href="/catalogo" className="btn-primary">Ir al catálogo →</Link>
+      </section>
+
+      {/* ── FOOTER ── */}
+      <footer>
+        <div className="footer-left">
+          <span className="brand-mark footer-mark">◈</span>
+          <span className="footer-copy">© 2025 Catálogo. Todos los derechos reservados.</span>
+        </div>
+        <Link href="/catalogo" className="btn-nav">Ver productos</Link>
+      </footer>
+    </>
   );
 }
