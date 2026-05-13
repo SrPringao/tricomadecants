@@ -6,18 +6,18 @@ import Link from "next/link";
 const FEATURES = [
   {
     n: "01",
-    title: "Elegí tu presentación",
-    body: "Cada producto está disponible en tres tamaños: S, M y L. Probá antes de comprometerte con el grande.",
+    title: "Elige tu presentación",
+    body: "Cada producto está disponible en tres tamaños: S, M y L. Prueba antes de comprometerte con el grande.",
   },
   {
     n: "02",
-    title: "Filtrá por serie",
-    body: "Organizamos el catálogo en series para que encuentres rápido lo que buscás.",
+    title: "Filtra por serie",
+    body: "Organizamos el catálogo en series para que encuentres rápido lo que buscas.",
   },
   {
     n: "03",
-    title: "Recibís en casa",
-    body: "Cada pedido viaja protegido y sellado. Listo para usar ni bien lo abrís.",
+    title: "Recíbelo en casa",
+    body: "Cada pedido viaja protegido y sellado. Listo para usar en cuanto lo abres.",
   },
 ];
 
@@ -71,8 +71,8 @@ export default function Home() {
             Tu catálogo,<br /><em>a tu medida.</em>
           </h1>
           <p className="hero-body reveal d2">
-            Explorá cada producto en el tamaño que necesitás.
-            Sin comprometerte con más de lo que querés.
+            Explora cada producto en el tamaño que necesitas.
+            Sin comprometerte con más de lo que quieres.
           </p>
           <div className="hero-actions reveal d3">
             <Link href="/catalogo" className="btn-primary">Ver catálogo completo</Link>
@@ -102,7 +102,7 @@ export default function Home() {
 
       {/* ── CTA ── */}
       <section className="cta-section reveal">
-        <p className="cta-label">Comenzá ahora</p>
+        <p className="cta-label">Comienza ahora</p>
         <h2 className="cta-title">¿Listo para explorar?</h2>
         <Link href="/catalogo" className="btn-primary">Ir al catálogo →</Link>
       </section>

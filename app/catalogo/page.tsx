@@ -60,6 +60,7 @@ export default function CatalogoPage() {
   const [selectedSizes, setSelectedSizes] = useState<Record<number, Size>>({});
   const [search, setSearch] = useState("");
   const [sortOpen, setSortOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [addedMap, setAddedMap] = useState<Record<string, boolean>>({});
 
   const { add, count, openCart } = useCart();
@@ -139,78 +140,94 @@ export default function CatalogoPage() {
       <div className="cat-layout">
         {/* ── SIDEBAR ── */}
         <aside className="cat-sidebar">
-          <div className="sidebar-section">
-            <p className="sidebar-title">Buscar</p>
-            <div className="search-wrap">
-              <input
-                type="text"
-                className="search-input"
-                placeholder="Nombre o característica…"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              {search && (
-                <button className="search-clear" onClick={() => setSearch("")}>✕</button>
+          {/* Header móvil colapsable */}
+          <button
+            className="sidebar-mobile-toggle"
+            onClick={() => setFiltersOpen(!filtersOpen)}
+          >
+            <span className="sidebar-mobile-label">
+              Filtros
+              {(activeCategory !== "Todo" || activeSize || search) && (
+                <span className="sidebar-active-dot" />
               )}
-            </div>
-          </div>
+            </span>
+            <span className={`sidebar-mobile-arrow ${filtersOpen ? "open" : ""}`}>▾</span>
+          </button>
 
-          <div className="sidebar-section">
-            <p className="sidebar-title">Serie</p>
-            <div className="sidebar-pills">
-              {CATEGORIES.map((c) => (
-                <button
-                  key={c}
-                  className={`s-pill ${activeCategory === c ? "active" : ""}`}
-                  onClick={() => setActiveCategory(c)}
-                  style={
-                    activeCategory === c && c !== "Todo"
-                      ? { background: CAT_COLOR[c], borderColor: CAT_COLOR[c], color: "#fff" }
-                      : {}
-                  }
-                >
-                  {c}
-                </button>
-              ))}
+          <div className={`sidebar-content ${filtersOpen ? "open" : ""}`}>
+            <div className="sidebar-section">
+              <p className="sidebar-title">Buscar</p>
+              <div className="search-wrap">
+                <input
+                  type="text"
+                  className="search-input"
+                  placeholder="Nombre o característica…"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+                {search && (
+                  <button className="search-clear" onClick={() => setSearch("")}>✕</button>
+                )}
+              </div>
             </div>
-          </div>
 
-          <div className="sidebar-section">
-            <p className="sidebar-title">Presentación</p>
-            <div className="sidebar-sizes">
-              {SIZES.map((s) => (
-                <button
-                  key={s}
-                  className={`size-toggle ${activeSize === s ? "active" : ""}`}
-                  onClick={() => setActiveSize(activeSize === s ? null : s)}
-                >
-                  <span className="size-toggle-letter">{s}</span>
-                  <span className="size-toggle-label">
-                    {s === "S" ? "Pequeño" : s === "M" ? "Mediano" : "Grande"}
-                  </span>
-                </button>
-              ))}
+            <div className="sidebar-section">
+              <p className="sidebar-title">Serie</p>
+              <div className="sidebar-pills">
+                {CATEGORIES.map((c) => (
+                  <button
+                    key={c}
+                    className={`s-pill ${activeCategory === c ? "active" : ""}`}
+                    onClick={() => setActiveCategory(c)}
+                    style={
+                      activeCategory === c && c !== "Todo"
+                        ? { background: CAT_COLOR[c], borderColor: CAT_COLOR[c], color: "#fff" }
+                        : {}
+                    }
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div className="sidebar-section">
-            <p className="sidebar-title">Rango de precio</p>
-            <div className="price-range-info">
-              <span>$38</span>
-              <span className="price-dash">—</span>
-              <span>$270</span>
+            <div className="sidebar-section">
+              <p className="sidebar-title">Presentación</p>
+              <div className="sidebar-sizes">
+                {SIZES.map((s) => (
+                  <button
+                    key={s}
+                    className={`size-toggle ${activeSize === s ? "active" : ""}`}
+                    onClick={() => setActiveSize(activeSize === s ? null : s)}
+                  >
+                    <span className="size-toggle-letter">{s}</span>
+                    <span className="size-toggle-label">
+                      {s === "S" ? "Pequeño" : s === "M" ? "Mediano" : "Grande"}
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
-            <p className="price-note">Seleccioná una presentación para ver precios exactos</p>
-          </div>
 
-          {(activeCategory !== "Todo" || activeSize || search) && (
-            <button
-              className="clear-all"
-              onClick={() => { setActiveCategory("Todo"); setActiveSize(null); setSearch(""); }}
-            >
-              Limpiar filtros
-            </button>
-          )}
+            <div className="sidebar-section">
+              <p className="sidebar-title">Rango de precio</p>
+              <div className="price-range-info">
+                <span>$38</span>
+                <span className="price-dash">—</span>
+                <span>$270</span>
+              </div>
+              <p className="price-note">Selecciona una presentación para ver precios exactos</p>
+            </div>
+
+            {(activeCategory !== "Todo" || activeSize || search) && (
+              <button
+                className="clear-all"
+                onClick={() => { setActiveCategory("Todo"); setActiveSize(null); setSearch(""); }}
+              >
+                Limpiar filtros
+              </button>
+            )}
+          </div>
         </aside>
 
         {/* ── MAIN ── */}
